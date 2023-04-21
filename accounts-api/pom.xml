@@ -35,5 +35,10 @@
             <artifactId>feign-okhttp</artifactId>
             <version>12.3</version>
         </dependency>
+        <dependency>
+            <groupId>com.bank.commons</groupId>
+            <artifactId>commons</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>
