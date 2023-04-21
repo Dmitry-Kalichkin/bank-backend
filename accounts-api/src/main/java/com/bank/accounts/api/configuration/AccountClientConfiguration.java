@@ -1,2 +1,5 @@
-package com.bank.accounts.api.configuration;public class AccountClientConfiguration {
+package com.bank.accounts.api.configuration;
+
+
+public class AccountClientConfiguration {
 }

@@ -1,0 +1,59 @@
+version: "3.2"
+
+services:
+  accounts-db:
+    container_name: accounts_db
+    image: postgres
+    environment:
+      POSTGRES_DB: accounts_db
+      POSTGRES_USER: accounts_dev
+      POSTGRES_PASSWORD: accounts_dev
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres:/data/postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U accounts_dev" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+  auth-db:
+    container_name: auth_db
+    image: postgres
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: auth_dev
+      POSTGRES_PASSWORD: auth_dev
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres:/data/postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U loans_dev" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+  loans-db:
+    container_name: loans_db
+    image: postgres
+    environment:
+      POSTGRES_DB: loans_db
+      POSTGRES_USER: loans_dev
+      POSTGRES_PASSWORD: loans_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/data/postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U loans_dev" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+
+
+volumes:
+  postgres:

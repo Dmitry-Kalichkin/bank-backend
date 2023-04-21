@@ -1,0 +1,27 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v2
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: accounts-service
+          uri: lb://accounts-service
+          predicates:
+            - Path=/api/v2/accounts/**
+        - id: loans-service
+          uri: lb://loans-service
+          predicates:
+            - Path=/api/v2/loans/**
