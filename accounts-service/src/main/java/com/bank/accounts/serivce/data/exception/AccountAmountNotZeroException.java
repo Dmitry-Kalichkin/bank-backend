@@ -1,4 +1,4 @@
-package ru.bank.accounts.data.exception;
+package com.bank.accounts.serivce.data.exception;
 
 public class AccountAmountNotZeroException extends RuntimeException {
     public AccountAmountNotZeroException(String message) {

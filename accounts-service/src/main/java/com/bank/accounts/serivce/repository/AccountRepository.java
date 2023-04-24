@@ -1,9 +1,11 @@
-package ru.bank.accounts.repository;
+package com.bank.accounts.serivce.repository;
 
 
+
+
+import com.bank.accounts.serivce.data.entity.AccountEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import ru.bank.accounts.data.entity.AccountEntity;
 
 import java.util.List;
 import java.util.UUID;

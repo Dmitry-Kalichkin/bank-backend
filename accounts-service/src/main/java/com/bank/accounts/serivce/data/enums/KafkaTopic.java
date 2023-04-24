@@ -1,4 +1,4 @@
-package ru.bank.accounts.data.enums;
+package com.bank.accounts.serivce.data.enums;
 
 public enum KafkaTopic {
     OPERATIONS_TOPIC_NAME("operations"),

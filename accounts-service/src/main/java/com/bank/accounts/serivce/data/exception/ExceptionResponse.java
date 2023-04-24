@@ -1,4 +1,4 @@
-package ru.bank.accounts.data.exception;
+package com.bank.accounts.serivce.data.exception;
 
 import lombok.Builder;
 import lombok.Getter;

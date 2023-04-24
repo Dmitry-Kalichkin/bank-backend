@@ -1,5 +1,15 @@
-package ru.bank.accounts.service.operation;
+package com.bank.accounts.serivce.service.operation;
 
+import com.bank.accounts.serivce.data.dto.operation.CreateOperationDto;
+import com.bank.accounts.serivce.data.dto.operation.LoanPaymentOperationDto;
+import com.bank.accounts.serivce.data.dto.operation.OperationResponseDto;
+import com.bank.accounts.serivce.data.entity.AccountEntity;
+import com.bank.accounts.serivce.data.entity.OperationEntity;
+import com.bank.accounts.serivce.data.enums.KafkaTopic;
+import com.bank.accounts.serivce.data.exception.OperationCantBeCompletedException;
+import com.bank.accounts.serivce.data.mapper.OperationMapper;
+import com.bank.accounts.serivce.repository.AccountRepository;
+import com.bank.accounts.serivce.repository.OperationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -7,17 +17,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bank.accounts.config.KafkaConfiguration;
-import ru.bank.accounts.data.dto.operation.CreateOperationDto;
-import ru.bank.accounts.data.dto.operation.LoanPaymentOperationDto;
-import ru.bank.accounts.data.dto.operation.OperationResponseDto;
-import ru.bank.accounts.data.entity.AccountEntity;
-import ru.bank.accounts.data.entity.OperationEntity;
-import ru.bank.accounts.data.enums.KafkaTopic;
-import ru.bank.accounts.data.exception.OperationCantBeCompletedException;
-import ru.bank.accounts.data.mapper.OperationMapper;
-import ru.bank.accounts.repository.AccountRepository;
-import ru.bank.accounts.repository.OperationRepository;
 
 @Slf4j
 @Service

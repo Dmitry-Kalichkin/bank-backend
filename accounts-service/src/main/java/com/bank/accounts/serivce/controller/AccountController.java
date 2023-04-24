@@ -4,29 +4,45 @@ import com.bank.accounts.api.api.AccountApi;
 import com.bank.accounts.api.dto.AccountDto;
 import com.bank.accounts.api.dto.CreateAccountDto;
 import com.bank.accounts.api.dto.LightAccountDto;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.bank.accounts.serivce.service.account.AccountService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
+@Validated
 @RestController
+@RequestMapping
+@RequiredArgsConstructor
+@Tag(name = "Accounts", description = "Endpoints related to accounts.")
 public class AccountController implements AccountApi {
+    private final AccountService accountService;
+
     @Override
-    public AccountDto save(CreateAccountDto createAccountDto) {
-        return null;
+    @PostMapping("/")
+    @ResponseStatus(HttpStatus.CREATED)
+    public AccountDto save(@RequestBody @Valid CreateAccountDto createAccountDto) {
+        return accountService.open(createAccountDto);
     }
 
     @Override
-    public void close(Long id) {
-
+    @GetMapping("/user/{userId}")
+    public List<LightAccountDto> getByUserId(@PathVariable UUID userId) {
+        return accountService.getAllByUserId(userId);
     }
 
-    @GetMapping("/test")
-    public String test() {
-        log.info("Received request");
-        return "Success";
+    @PatchMapping("/close/{id}")
+    public void close(@PathVariable  Long id) {
+        accountService.close(id);
+    }
+
+    @PatchMapping("/block/{id}")
+    public void block(@PathVariable Long id) {
+        accountService.block(id);
     }
 }

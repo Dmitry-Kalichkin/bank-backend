@@ -1,9 +1,9 @@
-package ru.bank.accounts.service.account;
+package com.bank.accounts.serivce.service.account;
 
+import com.bank.accounts.api.dto.AccountDto;
+import com.bank.accounts.api.dto.CreateAccountDto;
+import com.bank.accounts.api.dto.LightAccountDto;
 import org.springframework.stereotype.Service;
-import ru.bank.accounts.data.dto.account.AccountDto;
-import ru.bank.accounts.data.dto.account.LightAccountDto;
-import ru.bank.accounts.data.dto.account.CreateAccountDto;
 
 import java.util.List;
 import java.util.UUID;

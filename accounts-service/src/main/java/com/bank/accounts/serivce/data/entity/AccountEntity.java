@@ -1,4 +1,4 @@
-package ru.bank.accounts.data.entity;
+package com.bank.accounts.serivce.data.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

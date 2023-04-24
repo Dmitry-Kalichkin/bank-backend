@@ -1,8 +1,8 @@
-package ru.bank.accounts.service.operation;
+package com.bank.accounts.serivce.service.operation;
 
 
-import ru.bank.accounts.data.dto.operation.CreateOperationDto;
-import ru.bank.accounts.data.dto.operation.LoanPaymentOperationDto;
+import com.bank.accounts.serivce.data.dto.operation.CreateOperationDto;
+import com.bank.accounts.serivce.data.dto.operation.LoanPaymentOperationDto;
 
 public interface OperationService {
     void receiveOperation(CreateOperationDto createOperationDto);

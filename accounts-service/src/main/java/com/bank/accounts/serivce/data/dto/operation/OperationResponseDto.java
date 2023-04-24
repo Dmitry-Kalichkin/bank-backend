@@ -1,4 +1,4 @@
-package ru.bank.accounts.data.dto.operation;
+package com.bank.accounts.serivce.data.dto.operation;
 
 import lombok.Data;
 

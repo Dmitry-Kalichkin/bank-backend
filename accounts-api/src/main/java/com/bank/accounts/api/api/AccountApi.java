@@ -10,22 +10,22 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
-@FeignClient(name = "account-service", url = "${accounts-service.url}",
+@FeignClient(name = "accounts-service",
         configuration = AccountClientConfiguration.class)
 public interface AccountApi {
     @PostMapping
     AccountDto save(@RequestBody @Valid CreateAccountDto createAccountDto);
-/*
-    @GetMapping("/user/{userId}")
-    PageDto<LightAccountDto> getPageForUser(@PathVariable UUID userId);
 
-    @GetMapping("/manager/{userId}")
-    PageDto<LightAccountDto> getPageForManager(@PathVariable UUID managerId,
-                                                      @PathVariable UUID userId);
-*/
+    @GetMapping("/user/{userId}")
+    List<LightAccountDto> getByUserId(@PathVariable UUID userId);
+
     @RequestMapping(method = RequestMethod.PATCH, path= "/close/{id}")
     void close(@PathVariable Long id);
+
+    @RequestMapping(method = RequestMethod.PATCH, path= "/block/{id}")
+    void block(@PathVariable Long id);
 }

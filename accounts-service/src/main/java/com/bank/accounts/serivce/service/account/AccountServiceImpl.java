@@ -1,16 +1,16 @@
-package ru.bank.accounts.service.account;
+package com.bank.accounts.serivce.service.account;
 
+import com.bank.accounts.api.dto.AccountDto;
+import com.bank.accounts.api.dto.CreateAccountDto;
+import com.bank.accounts.api.dto.LightAccountDto;
+import com.bank.accounts.serivce.data.entity.AccountEntity;
+import com.bank.accounts.serivce.data.exception.AccountAmountNotZeroException;
+import com.bank.accounts.serivce.data.exception.AccountNotFoundException;
+import com.bank.accounts.serivce.data.mapper.AccountMapper;
+import com.bank.accounts.serivce.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bank.accounts.data.dto.account.AccountDto;
-import ru.bank.accounts.data.dto.account.LightAccountDto;
-import ru.bank.accounts.data.dto.account.CreateAccountDto;
-import ru.bank.accounts.data.entity.AccountEntity;
-import ru.bank.accounts.data.exception.AccountAmountNotZeroException;
-import ru.bank.accounts.data.exception.AccountNotFoundException;
-import ru.bank.accounts.data.mapper.AccountMapper;
-import ru.bank.accounts.repository.AccountRepository;
 
 import java.sql.Date;
 import java.util.List;
@@ -49,10 +49,6 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() ->
                         new AccountNotFoundException("account with id " + id +
                                 " not found"));
-        if (accountEntity.getAmount() != 0D) {
-            throw new AccountAmountNotZeroException("account amount have to be zero" +
-                    " for closing it");
-        }
         accountEntity.setClosingDate(new Date(new java.util.Date().getTime()));
     }
 

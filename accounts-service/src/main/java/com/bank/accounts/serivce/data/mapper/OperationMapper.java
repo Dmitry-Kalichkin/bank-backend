@@ -1,13 +1,13 @@
-package ru.bank.accounts.data.mapper;
+package com.bank.accounts.serivce.data.mapper;
 
+import com.bank.accounts.serivce.data.dto.operation.CreateOperationDto;
+import com.bank.accounts.serivce.data.dto.operation.OperationDto;
+import com.bank.accounts.serivce.data.entity.AccountEntity;
+import com.bank.accounts.serivce.data.entity.OperationEntity;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import ru.bank.accounts.data.dto.operation.CreateOperationDto;
-import ru.bank.accounts.data.dto.operation.OperationDto;
-import ru.bank.accounts.data.entity.AccountEntity;
-import ru.bank.accounts.data.entity.OperationEntity;
 
 import java.util.Objects;
 
