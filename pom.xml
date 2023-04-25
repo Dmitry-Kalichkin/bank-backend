@@ -32,6 +32,7 @@
         <swagger.version>2.0.0</swagger.version>
     </properties>
     <dependencyManagement>
+
         <dependencies>
             <dependency>
                 <groupId>org.springdoc</groupId>

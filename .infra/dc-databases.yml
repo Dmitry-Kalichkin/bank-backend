@@ -43,7 +43,7 @@ services:
       POSTGRES_USER: loans_dev
       POSTGRES_PASSWORD: loans_dev
     ports:
-      - "5432:5432"
+      - "5435:5432"
     volumes:
       - postgres:/data/postgres
     healthcheck:

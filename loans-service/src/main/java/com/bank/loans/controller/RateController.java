@@ -1,11 +1,11 @@
 package com.bank.loans.controller;
 
 import com.bank.commons.exception.ExceptionResponse;
-import com.bank.loans.data.dto.loan.CreateLoanDto;
-import com.bank.loans.data.dto.loan.LightLoanDto;
 import com.bank.loans.data.dto.loan.LoanDto;
-import com.bank.loans.data.exception.UserManagerSameIdException;
-import com.bank.loans.service.loan.LoanService;
+import com.bank.loans.data.dto.rate.CreateRateDto;
+import com.bank.loans.data.dto.rate.LightRateDto;
+import com.bank.loans.data.dto.rate.RateDto;
+import com.bank.loans.service.rate.RateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,86 +18,51 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
-@RequestMapping(produces = "application/json")
+@RequestMapping(value = "/rates", produces = "application/json")
 @RequiredArgsConstructor
-@Tag(name = "Loans", description = "Endpoints related to loans.")
-public class LoanController {
-    private final LoanService loanService;
+@Tag(name = "Rates", description = "Endpoints related to rates. " +
+        "Rate is a part of loan that describes how loan should be increased.")
+public class RateController {
+    private final RateService rateService;
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
-                    description = "Loan successfully opened",
+                    description = "Rate successfully created",
                     content = @Content),
             @ApiResponse(responseCode = "400",
                     description = "Invalid data provided." +
-                            " See CreateLoanDto and notice that" +
-                            " manager can;t give loan to himself",
+                            " See CreateRateDto and notice that each rate name is unique",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionResponse.class))),
             @ApiResponse(responseCode = "500",
                     description = "Unknown error on server",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionResponse.class))) })
-    @Operation(summary = "Open new loan")
+    @Operation(summary = "Create new rate")
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public LoanDto open(@RequestBody @Valid CreateLoanDto createLoanDto) {
-        if (createLoanDto.getManagerId().equals(createLoanDto.getUserId())) {
-            throw new UserManagerSameIdException("manager can't give loan to himself",
-                    "Manager " + createLoanDto.getManagerId() +
-                            " tried to give loan to himself"
-            );
-        }
-        return loanService.open(createLoanDto);
+    public void save(@RequestBody @Valid CreateRateDto createRateDto) {
+        rateService.save(createRateDto);
     }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "Loan successfully closed",
-                    content = @Content),
-            @ApiResponse(responseCode = "400",
-                    description = "Invalid id data type provided." +
-                            " Ensure to provide id type 'long' ",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ExceptionResponse.class))),
-            @ApiResponse(responseCode = "404",
-                    description = "Loan with such id not found",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ExceptionResponse.class))),
+                    description = "Rates returned"),
             @ApiResponse(responseCode = "500",
                     description = "Unknown error on server",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionResponse.class))) })
-    @Operation(summary = "Close loan")
-    @PatchMapping("/close/{id}")
-    public void close(@PathVariable Long id) {
-        loanService.close(id);
+    @Operation(summary = "Get accessible rates")
+    @GetMapping("/")
+    public List<LightRateDto> getAll() {
+        return rateService.getAll();
     }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "Loans found and returned"),
-            @ApiResponse(responseCode = "400",
-                    description = "Invalid user id data type provided." +
-                            " Ensure that you provide id type 'uuid' ",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ExceptionResponse.class))),
-            @ApiResponse(responseCode = "500",
-                    description = "Unknown error on server",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ExceptionResponse.class))) })
-    @Operation(summary = "Get loans related to particular user")
-    @GetMapping(value = "/user/{id}")
-    public List<LightLoanDto> GetAllByUser(@PathVariable UUID id) {
-        return loanService.getAllByUser(id);
-    }
-
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Loan found and returned",
+                    description = "Rate found and returned",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = LoanDto.class))),
             @ApiResponse(responseCode = "400",
@@ -106,16 +71,40 @@ public class LoanController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionResponse.class))),
             @ApiResponse(responseCode = "404",
-                    description = "Loan with such id not found",
+                    description = "Rate with such id not found",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionResponse.class))),
             @ApiResponse(responseCode = "500",
                     description = "Unknown error on server",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExceptionResponse.class))) })
-    @Operation(summary = "Get full loan data by loan's id")
+    @Operation(summary = "Get rate details by id")
     @GetMapping("/{id}")
-    public LoanDto getById(@PathVariable Long id) {
-        return loanService.getById(id);
+    public RateDto getById(@PathVariable Long id) {
+        return rateService.getById(id);
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Rate found and returned",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = LoanDto.class))),
+            @ApiResponse(responseCode = "400",
+                    description = "Invalid data provided",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionResponse.class))),
+            @ApiResponse(responseCode = "404",
+                    description = "Rate with such name not found",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionResponse.class))),
+            @ApiResponse(responseCode = "500",
+                    description = "Unknown error on server",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExceptionResponse.class))) })
+    @Operation(summary = "Get rate details by name")
+    @GetMapping("/name/{name}")
+    public RateDto getByName(@PathVariable String name) {
+        return rateService.getByName(name);
     }
 }
+

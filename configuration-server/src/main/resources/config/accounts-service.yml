@@ -42,3 +42,10 @@ spring:
       auto-offset-reset: earliest
     listener:
       poll-timeout: 30000
+
+springdoc:
+  swagger-ui:
+    path: /swagger
+  api-docs:
+    path: /api-docs
+  override-with-generic-response: false

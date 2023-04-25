@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS rates (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    name varchar UNIQUE,
+    manager_id UUID NOT NULL,
+    interest_rate NUMERIC(4, 2) NOT NULL,
+    created DATE NOT NULL DEFAULT CURRENT_DATE
+);
+

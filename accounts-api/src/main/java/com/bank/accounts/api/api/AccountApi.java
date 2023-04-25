@@ -1,6 +1,5 @@
 package com.bank.accounts.api.api;
 
-import com.bank.accounts.api.configuration.AccountClientConfiguration;
 import com.bank.accounts.api.dto.AccountDto;
 import com.bank.accounts.api.dto.CreateAccountDto;
 import com.bank.accounts.api.dto.LightAccountDto;
@@ -14,10 +13,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-@FeignClient(name = "accounts-service",
-        configuration = AccountClientConfiguration.class)
+@FeignClient(name = "accounts-service", url = "http://localhost:8081/api/v2/accounts")
 public interface AccountApi {
-    @PostMapping
+    @PostMapping("/")
     AccountDto save(@RequestBody @Valid CreateAccountDto createAccountDto);
 
     @GetMapping("/user/{userId}")

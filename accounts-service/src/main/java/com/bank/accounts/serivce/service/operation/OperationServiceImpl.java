@@ -1,7 +1,7 @@
 package com.bank.accounts.serivce.service.operation;
 
 import com.bank.accounts.serivce.data.dto.operation.CreateOperationDto;
-import com.bank.accounts.serivce.data.dto.operation.LoanPaymentOperationDto;
+import com.bank.accounts.serivce.data.dto.operation.LoanOperationDto;
 import com.bank.accounts.serivce.data.dto.operation.OperationResponseDto;
 import com.bank.accounts.serivce.data.entity.AccountEntity;
 import com.bank.accounts.serivce.data.entity.OperationEntity;
@@ -17,6 +17,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -36,12 +38,23 @@ public class OperationServiceImpl implements OperationService {
         OperationEntity operationEntity = createOperationEntity(createOperationDto);
 
         try {
-            if (operationEntity.getAccount().getAmount() >= operationEntity.getAmount()) {
-                operationEntity.getAccount().setAmount(operationEntity.getAccount().getAmount() - operationEntity.getAmount());
-                operationEntity.setIsSuccessfully(true);
-            } else {
-                operationEntity.setIsSuccessfully(false);
-            }
+                if (Objects.nonNull(operationEntity.getAccount())
+                    && Objects.isNull(operationEntity.getAccount().getClosingDate())
+                        && operationEntity.getAccount().getAmount() >= operationEntity.getAmount()) {
+                    operationEntity.getAccount().setAmount(operationEntity.getAccount().getAmount() - operationEntity.getAmount());
+
+                    if (Objects.nonNull(operationEntity.getDestinationAccount())) {
+                        operationEntity.getDestinationAccount().setAmount(operationEntity.getDestinationAccount().getAmount() + operationEntity.getAmount());
+                    }
+
+                    operationEntity.setIsSuccessfully(true);
+                } else if (Objects.isNull(operationEntity.getAccount())
+                        && Objects.nonNull(operationEntity.getDestinationAccount())) {
+                    operationEntity.getDestinationAccount().setAmount(operationEntity.getDestinationAccount().getAmount() + operationEntity.getAmount());
+                    operationEntity.setIsSuccessfully(true);
+                } else {
+                    operationEntity.setIsSuccessfully(false);
+                }
             operationRepository.save(operationEntity);
         } catch (Exception exception) {
             log.warn(exception.getMessage());
@@ -54,11 +67,24 @@ public class OperationServiceImpl implements OperationService {
     @KafkaListener(id = "operation with reply listener",
             topics = "loans-payments-operations",
             groupId = "operations-handlers-1")
-    public void receiveOperationWithReply(@Payload LoanPaymentOperationDto loanPaymentOperationDto) {
-        OperationEntity operationEntity = createOperationEntity(loanPaymentOperationDto);
+    public void receiveOperationWithReply(@Payload LoanOperationDto loanOperationDto) {
+        OperationEntity operationEntity = createOperationEntity(loanOperationDto);
+
         try {
-            if (operationEntity.getAccount().getAmount() >= operationEntity.getAmount()) {
+
+            if (Objects.nonNull(operationEntity.getAccount())
+                    && Objects.isNull(operationEntity.getAccount().getClosingDate())
+                    && operationEntity.getAccount().getAmount() >= operationEntity.getAmount()) {
                 operationEntity.getAccount().setAmount(operationEntity.getAccount().getAmount() - operationEntity.getAmount());
+
+                if (Objects.nonNull(operationEntity.getDestinationAccount())) {
+                    operationEntity.getDestinationAccount().setAmount(operationEntity.getDestinationAccount().getAmount() + operationEntity.getAmount());
+                }
+
+                operationEntity.setIsSuccessfully(true);
+            } else if (Objects.isNull(operationEntity.getAccount())
+                    && Objects.nonNull(operationEntity.getDestinationAccount())) {
+                operationEntity.getDestinationAccount().setAmount(operationEntity.getDestinationAccount().getAmount() + operationEntity.getAmount());
                 operationEntity.setIsSuccessfully(true);
             } else {
                 operationEntity.setIsSuccessfully(false);
@@ -66,10 +92,10 @@ public class OperationServiceImpl implements OperationService {
             operationRepository.save(operationEntity);
 
             OperationResponseDto operationResponseDto = new OperationResponseDto();
-            operationResponseDto.setId(loanPaymentOperationDto.getPaymentId());
+            operationResponseDto.setId(loanOperationDto.getPaymentId());
             operationResponseDto.setSuccessfully(operationEntity.getIsSuccessfully());
 
-            template.send(KafkaTopic.PAYMENT_RESPONSES_TOPIC_NAME.getValue(), operationResponseDto);
+            template.send("loans-payments-responses", operationResponseDto);
         } catch (Exception exception) {
             log.warn(exception.getMessage());
             throw new OperationCantBeCompletedException("cant save new operation");

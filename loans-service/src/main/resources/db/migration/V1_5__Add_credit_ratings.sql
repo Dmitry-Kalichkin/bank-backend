@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS credit_ratings (
+    id UUID PRIMARY KEY,
+    value SMALLINT NOT NULL DEFAULT 100
+)
