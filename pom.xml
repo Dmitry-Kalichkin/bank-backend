@@ -21,6 +21,7 @@
         <module>gateway</module>
         <module>loans-service</module>
         <module>commons</module>
+        <module>users-service</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
