@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-@FeignClient(name = "accounts-service", url = "http://localhost:8081/api/v2/accounts")
+@FeignClient(name = "accounts-service", url = "http://localhost:8080/api/v2/accounts")
 public interface AccountApi {
     @PostMapping("/")
     AccountDto save(@RequestBody @Valid CreateAccountDto createAccountDto);
