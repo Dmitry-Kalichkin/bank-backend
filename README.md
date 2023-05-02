@@ -44,7 +44,7 @@ $ http://localhost:8080/api/v2/accounts/swagger-ui/index.html
 
 _Loans service:_
 ```
-$ http://localhost:8080/api/v2/accounts/swagger-ui/index.html
+$ http://localhost:8080/api/v2/loans/swagger-ui/index.html
 ```
 
 _Users service also have swagger, but you can't use this service for now,
