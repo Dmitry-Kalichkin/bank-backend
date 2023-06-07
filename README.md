@@ -2,7 +2,7 @@
 
 > **NOTICE.**
 Tests where provided for services in corresponding repositories, now only loans repository (old version) is open.
-If you want, you can find commit, where I remove tests due to specific circumstances and look previous one. There where unit, integration and P2P tests for not secured services.
+If you want, you can find commit, where I remove tests due to specific circumstances and look previous one. There where unit, integration tests for not secured services.
 
 
 Services with strange requirements for backend part of bank project.
